@@ -3,7 +3,7 @@ import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import classes from './SideDrawer.css';
 import Backdrop from '../../UI/Backdrop/Backdrop';
-import Aux from '../../../hoc/aux';
+import Aux from '../../../hoc/Aux/aux';
 
 //functinoal because before we return jsx we will have some logic
 const sideDrawer = (props) => {
