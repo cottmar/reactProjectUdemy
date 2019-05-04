@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './ContactData.css';
 import Input from '../../../components/UI/Input/Input';
 import axios from '../../../axios-orders';
+import withErrorHandler from '../../../hoc/WithErrorHandler/WithErrorHandler';
+import * as actions from '../../../store/actions/index';
 
 class ContactData extends Component {
     state = {
@@ -88,31 +91,24 @@ class ContactData extends Component {
               validation: {},
               valid: true
             }
-        },
-        loading: false
+        }
     }
 
     orderHandler = ( event ) => {
         event.preventDefault();
-        this.setState( { loading: true } );
+
         const formData = {};
         for (let formElementIdentifier in this.state.orderForm) {
           // email, country, etc
           formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
         }
         const order = {
-            ingredients: this.props.ingredients,
+            ingredients: this.props.ings,
             price: this.props.price,
             orderData: formData
         }
-        axios.post( '/orders.json', order )
-            .then( response => {
-                this.setState( { loading: false } );
-                this.props.history.push('/');
-            } )
-            .catch( error => {
-                this.setState( { loading: false } );
-            } );
+        // order contains the above
+        this.props.onOrderBurger(order);
     }
 
     checkValidity(value, rules) {
@@ -197,4 +193,16 @@ class ContactData extends Component {
     }
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+  return {
+    ings: state.ingredients,
+    price: state.totalPrice,
+    loading: state.orders.loading
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData))
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
