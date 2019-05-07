@@ -3,8 +3,14 @@ export {
   removeIngredient,
   initIngredients
 } from './burgerBuilder';
-
-export { 
-  purchaseBurgerStart,
-  purchaseInit
- } from './order';
+export {
+  purchaseBurger,
+  purchaseInit,
+  fetchOrders
+} from './order';
+export {
+  auth,
+  logout,
+  setAuthRedirectPath,
+  authCheckState
+} from './auth';
